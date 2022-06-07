@@ -9,7 +9,7 @@ Experimental support for VS Code Server in NixOS. The NodeJS by default supplied
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-vscode-server.url ="github:iosmanthus/nixos-vscode-server/add-flake";
+    nixos-vscode-server.url ="github:darkn07/nixos-vscode-server";
   };
 
   outputs = inputs@{self, nixpkgs, ...}: {
@@ -20,7 +20,7 @@ Experimental support for VS Code Server in NixOS. The NodeJS by default supplied
         modules = [
           ./configuration.nix
           {
-            imports = [ inputs.auto-fix-vscode-server.nixosModules.system ];
+            imports = [ inputs.nixos-vscode-server.nixosModules.system ];
             services.auto-fix-vscode-server.enable = true;
           }
         ];
@@ -35,7 +35,7 @@ Experimental support for VS Code Server in NixOS. The NodeJS by default supplied
 {
     inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos-vscode-server.url ="github:iosmanthus/nixos-vscode-server/add-flake";
+    nixos-vscode-server.url ="github:darkn07/nixos-vscode-server";
   };
 
   outputs = inputs@{self, nixpkgs, ...}: {
