@@ -4,16 +4,32 @@ Experimental support for VS Code Server in NixOS. The NodeJS by default supplied
 
 ## Installation
 
+### Flake
 ```nix
 {
-  imports = [
-    (fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master")
-  ];
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-vscode-server.url ="github:iosmanthus/nixos-vscode-server/add-flake";
+  };
 
-  services.vscode-server.enable = true;
+  outputs = inputs@{self, nixpkgs, ...}: {
+    nixosConfigurations.some-host = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        # For more information of this field, check:
+        # https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/eval-config.nix
+        modules = [
+          ./configuration.nix
+          {
+            imports = [ inputs.auto-fix-vscode-server.nixosModules.system ];
+            services.auto-fix-vscode-server.enable = true;
+          }
+        ];
+      };
+  };
 }
 ```
 
+<<<<<<< HEAD
 And then enable them for the relevant users:
 
 ```
@@ -44,18 +60,40 @@ However you can safely ignore it. The service will start automatically after reb
 systemctl --user start auto-fix-vscode-server.service
 ```
 
+=======
+>>>>>>> master-holder
 ### Home Manager
 
 Put this code into your [home-manager](https://github.com/nix-community/home-manager) configuration i.e. in `~/.config/nixpkgs/home.nix`:
 
 ```nix
 {
-  imports = [
-    "${fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master"}/modules/vscode-server/home.nix"
-  ];
+    inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-vscode-server.url ="github:iosmanthus/nixos-vscode-server/add-flake";
+  };
 
-  services.vscode-server.enable = true;
+  outputs = inputs@{self, nixpkgs, ...}: {
+    nixosConfigurations.some-host = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        # For more information of this field, check:
+        # https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/eval-config.nix
+        modules = [
+          ./configuration.nix
+          {
+            home-manager = {
+              user.iosmanthus = {
+                imports = [ 
+                  inputs.nixos-vscode-server.nixosModules.homeManager;
+                ];
+              };
+            };
+          }
+        ];
+      };
+    };
 }
+<<<<<<< HEAD
 ```
 
 ## Usage
@@ -71,3 +109,6 @@ systemctl --user disable auto-fix-vscode-server.service
 ````
 
 This will remove the symlink to the old version. Then you can enable/start it again.
+=======
+```
+>>>>>>> master-holder
